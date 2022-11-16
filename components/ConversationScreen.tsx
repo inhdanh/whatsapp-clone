@@ -33,6 +33,7 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore'
+import { CircularProgress } from '@mui/material'
 
 const StyledRecipientHeader = styled.div`
   position: sticky;
@@ -96,6 +97,13 @@ const StyledInput = styled.input`
 
 const EndOfMessageForAutoScroll = styled.div`
   margin-bottom: 30px;
+`
+
+const StyledCircularProgressContainer = styled.div`
+  display: flex;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
 `
 
 const ConversationScreen = ({
@@ -181,6 +189,8 @@ const ConversationScreen = ({
     addMessageToDbAndUpdateLastSeen()
   }
 
+  console.log('messageLoading :>> ', messageLoading)
+
   return (
     <>
       <StyledRecipientHeader>
@@ -206,13 +216,18 @@ const ConversationScreen = ({
           </IconButton>
         </StyledHeaderIcons>
       </StyledRecipientHeader>
+
       <StyledMessageContainer>
-        {showMessages()}
+        {messageLoading ? (
+          <StyledCircularProgressContainer>
+            <CircularProgress />
+          </StyledCircularProgressContainer>
+        ) : (
+          showMessages()
+        )}
         {/* for auto scroll to the end when a new message is sent */}
         <EndOfMessageForAutoScroll ref={endOfMessagesRef} />
       </StyledMessageContainer>
-
-      {/* Enter new message */}
       <StyledInputContainer>
         <InsertEmotionIcon />
         <StyledInput
